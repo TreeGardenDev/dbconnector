@@ -2,9 +2,22 @@
 use mysql::prelude::*;
 use mysql::*;
 use csv::Reader;
+use clap::Parser;
 fn main(){
-   let data= read_csv();
-    println!("{:?}", data);
+    let pattern=std::env::args().nth(1).expect("No file given");
+    //let args=CLI{
+    //    pattern:pattern,
+    //};
+    let args=CLI::parse();
+   // let content=std::fs::read_to_string(&args.pattern).expect("Could not read file");
+   // for line in content.lines(){
+   //     if line.contains(&args.pattern){
+   //         println!("{}",line);
+   //     }
+   
+   read_csv(&args.pattern);
+  // let data= read_csv();
+   // println!("{:?}", data);
    //    database_connection();
 }
 
@@ -17,6 +30,10 @@ struct Data {
     age: i32,
     address: String,
     salary: i32,
+}
+#[derive(Parser)]
+struct CLI {
+    pattern: String,
 }
 fn database_connection(data:&Vec<Data>) -> std::result::Result<(), Box<dyn std::error::Error>>  {
     
@@ -52,10 +69,10 @@ fn database_connection(data:&Vec<Data>) -> std::result::Result<(), Box<dyn std::
     Ok(())
     //todo
 }
-fn read_csv() -> std::result::Result<(), Box<dyn std::error::Error>> {
+fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Error>> {
     
 //fn read_csv() ->Vec<Data> { 
-    let mut rdr = Reader::from_path("data.csv")?;
+    let mut rdr = Reader::from_path(file)?;
     let mut data: Vec<Data> = Vec::new();
     for result in rdr.records() {
         let record = result?;
@@ -77,36 +94,5 @@ fn read_csv() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("{:?}", data);
     Ok(())
 }
-/*
-fn read_csv(file_path: &str, headers:bool)->Data {
-let file = std::fs::File::open(file_path).unwrap();
-let mut rdr=csv::ReaderBuilder::new()
-    .has_headers(headers)
-    .from_reader(file);
+//add CLI to read csv file
 
-    let mut data_frame=Data::new();
-    for result in rdr.records(){
-        let record=result.unwrap();
-        data_frame.push(&record);
-    }
-    return data_frame;
-}
-fn new() -> Data {
-       Data {
-           Header: csv::StringRecord::new(),
-           id: i32,
-           name: String,
-           age: i32,
-           address: String,
-           salary: i32,
-       }
-   }
-fn push(&mut self, row: &csv::StringRecord) {
-       self.id.push(row[0].parse().unwrap());
-       self.name.push(row[1].to_string());
-       self.age.push(row[2].parse().unwrap());
-       self.address.push(row[3].to_string());
-       self.salary.push(row[4].parse().unwrap());
-   }
-}
-*/
