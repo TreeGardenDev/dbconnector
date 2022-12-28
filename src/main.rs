@@ -2,8 +2,6 @@
 use mysql::prelude::*;
 use mysql::*;
 use csv::Reader;
-use csv::*;
-use std::error::Error;
 fn main(){
    let data= read_csv();
     println!("{:?}", data);
@@ -20,7 +18,7 @@ struct Data {
     address: String,
     salary: i32,
 }
-fn database_connection() -> std::result::Result<(), Box<dyn std::error::Error>>  {
+fn database_connection(data:&Vec<Data>) -> std::result::Result<(), Box<dyn std::error::Error>>  {
     
     let url = "mysql://kylelocal:kcb@127.0.0.1:3306/testcsv";
     mysql::Opts::try_from(url)?;
@@ -28,17 +26,11 @@ fn database_connection() -> std::result::Result<(), Box<dyn std::error::Error>> 
    //let url=get_opts();
     let pool = Pool::new(url)?;
     let mut conn = pool.get_conn()?;
-    let people=vec![Data{
-        id: 1,
-        name: "kyle".to_string(),
-        age: 21,
-        address: "1234".to_string(),
-        salary: 100000,
-    }];
+
     conn.exec_batch(
         r"INSERT INTO Data(id, name, age, address, salary)
         VALUES (:id, :name, :age, :address, :salary)",
-        people.iter().map(|p| params! {
+        data.iter().map(|p| params! {
             "id" => p.id,
             "name" => &p.name,
             "age" => p.age,
@@ -60,9 +52,9 @@ fn database_connection() -> std::result::Result<(), Box<dyn std::error::Error>> 
     Ok(())
     //todo
 }
-//fn read_csv() -> std::result::Result<(), Box<dyn std::error::Error>> {
+fn read_csv() -> std::result::Result<(), Box<dyn std::error::Error>> {
     
-fn read_csv() ->Vec<Data> { 
+//fn read_csv() ->Vec<Data> { 
     let mut rdr = Reader::from_path("data.csv")?;
     let mut data: Vec<Data> = Vec::new();
     for result in rdr.records() {
@@ -80,6 +72,8 @@ fn read_csv() ->Vec<Data> {
             salary,
         });
     }
+
+    database_connection(&data);
     println!("{:?}", data);
     Ok(())
 }
