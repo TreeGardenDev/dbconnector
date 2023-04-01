@@ -8,7 +8,7 @@ pub mod tablecreate;
 fn main() {
     let pattern = std::env::args().nth(1).expect("No file given");
     let path= std::env::args().nth(2).expect("No file given");
-    let table= std::env::args().nth(3).expect("No file given");
+  //  let table= std::env::args().nth(3).expect("No file given");
 
 
     let args = CLI::parse();
