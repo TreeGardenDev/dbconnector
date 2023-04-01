@@ -69,6 +69,12 @@ fn execute_insert(
 ) -> std::result::Result<(), Box<dyn std::error::Error>> {
     //read from csv the column names
   
+   let table_name = String::from("Data"); 
+    let mut query = String::from("SELECT * FROM");
+    query.push_str(&table_name);
+    query.push_str(";");
+    let mut stmt = conn.query_drop(query)?;
+    println!("{:?}", stmt);
     conn.exec_batch(
         r"INSERT INTO Data(id, name, age, address, salary)
         VALUES (:id, :name, :age, :address, :salary)",
@@ -118,7 +124,5 @@ fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Error>
 
     let connection = database_connection();
     execute_insert(&data, connection);
- //   println!("{:?}", data);
     Ok(())
 }
-//add CLI to read csv file
