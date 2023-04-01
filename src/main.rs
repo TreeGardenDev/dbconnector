@@ -68,13 +68,15 @@ fn execute_insert(
     mut conn: PooledConn,
 ) -> std::result::Result<(), Box<dyn std::error::Error>> {
     //read from csv the column names
-  
-  // let table_name = String::from("Data"); 
-  //  let mut query = String::from("SELECT * FROM");
-  //  query.push_str(&table_name);
-
-  //  let mut stmt = conn.query_drop(query)?;
-  //  println!("{:?}", stmt);
+   //execute sql statement below
+    //let columnname = conn.query_map("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='Data'", |(COLUMN_NAME)| COLUMN_NAME)?;
+    let columnname: Vec<String> = conn.query_map("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='Data'", |(COLUMN_NAME)| COLUMN_NAME)?;
+    for i in columnname{
+        println!("{:?}", i);
+    }
+   //SELECT `COLUMN_NAME`  FROM `INFORMATION_SCHEMA`.`COLUMNS`  WHERE `TABLE_SCHEMA`='testcsv' AND `TABLE_NAME`='Data'; 
+   
+    
     conn.exec_batch(
         r"INSERT INTO Data(id, name, age, address, salary)
         VALUES (:id, :name, :age, :address, :salary)",
