@@ -7,17 +7,26 @@ pub mod pushdata;
 pub mod tablecreate;
 fn main() {
     let pattern = std::env::args().nth(1).expect("No file given");
-    //let args=CLI{
-    //    pattern:pattern,
-    //};
-    let args = CLI::parse();
-    // let content=std::fs::read_to_string(&args.pattern).expect("Could not read file");
-    // for line in content.lines(){
-    //     if line.contains(&args.pattern){
-    //         println!("{}",line);
-    //     }
+    let path= std::env::args().nth(2).expect("No file given");
 
-    read_csv(&args.pattern);
+
+    let args = CLI::parse();
+    match args.pattern.as_str() {
+        "create" => {
+            let mut connection = database_connection();
+            let columnname = vec!["id".to_string(), "name".to_string(), "age".to_string(), "address".to_string(), "salary".to_string()];
+            tablecreate::create_table(&mut connection, &args.path.to_str().unwrap(), &columnname);
+        }
+        "insert" => {
+           // pushdata::push_data();
+            read_csv(&args.pattern);
+        }
+        _ => {
+            println!("No command given");
+        }
+    }
+    
+
     // let data= read_csv();
     // println!("{:?}", data);
     //    database_connection();
@@ -43,6 +52,7 @@ struct Table {
 #[derive(Parser)]
 struct CLI {
     pattern: String,
+    path:std::path::PathBuf,
 }
 fn database_connection() -> PooledConn {
     let url = "mysql://kylelocal:kcb@127.0.0.1:3306/testcsv";
