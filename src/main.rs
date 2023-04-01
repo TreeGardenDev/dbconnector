@@ -4,6 +4,7 @@ use mysql::*;
 use csv::Reader;
 use clap::Parser;
 pub mod tablecreate;
+pub mod pushdata;
 fn main(){
     let pattern=std::env::args().nth(1).expect("No file given");
     //let args=CLI{
@@ -36,15 +37,14 @@ struct Data {
 struct CLI {
     pattern: String,
 }
-fn database_connection(data:&Vec<Data>) -> std::result::Result<(), Box<dyn std::error::Error>>  {
+fn database_connection() -> PooledConn {
     
     let url = "mysql://kylelocal:kcb@127.0.0.1:3306/testcsv";
-    mysql::Opts::try_from(url)?;
-    
-   //let url=get_opts();
-    let pool = Pool::new(url)?;
-    let mut conn = pool.get_conn()?;
-
+    let pool = Pool::new(url).unwrap();
+    let mut  conn = pool.get_conn().unwrap();
+    conn
+}
+fn execute_insert(data:&Vec<Data>, mut conn:PooledConn)-> std::result::Result<(), Box<dyn std::error::Error>>  {
     conn.exec_batch(
         r"INSERT INTO Data(id, name, age, address, salary)
         VALUES (:id, :name, :age, :address, :salary)",
@@ -91,7 +91,8 @@ fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Error>
         });
     }
 
-    database_connection(&data);
+    let connection=database_connection();
+    execute_insert(&data, connection);
     println!("{:?}", data);
     Ok(())
 }
