@@ -33,6 +33,13 @@ struct Data {
     address: String,
     salary: i32,
 }
+
+#[derive(Debug, PartialEq, Eq)]
+struct Table{
+    tablename:String,
+    columnname:Vec<String>,
+    columntype:Vec<String>,
+}
 #[derive(Parser)]
 struct CLI {
     pattern: String,
