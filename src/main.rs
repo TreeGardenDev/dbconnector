@@ -8,6 +8,7 @@ pub mod tablecreate;
 fn main() {
     let pattern = std::env::args().nth(1).expect("No file given");
     let path= std::env::args().nth(2).expect("No file given");
+    let table= std::env::args().nth(3).expect("No file given");
 
 
     let args = CLI::parse();
@@ -52,6 +53,7 @@ struct Table {
 #[derive(Parser)]
 struct CLI {
     pattern: String,
+    table: String,
     path:std::path::PathBuf,
 }
 fn database_connection() -> PooledConn {
@@ -64,6 +66,8 @@ fn execute_insert(
     data: &Vec<Data>,
     mut conn: PooledConn,
 ) -> std::result::Result<(), Box<dyn std::error::Error>> {
+    //read from csv the column names
+  
     conn.exec_batch(
         r"INSERT INTO Data(id, name, age, address, salary)
         VALUES (:id, :name, :age, :address, :salary)",
@@ -77,17 +81,17 @@ fn execute_insert(
             }
         }),
     )?;
-    let selected_data = conn.query_map(
-        "SELECT id, name, age, address, salary FROM Data",
-        |(id, name, age, address, salary)| Data {
-            id,
-            name,
-            age,
-            address,
-            salary,
-        },
-    )?;
-    println!("{:?}", selected_data);
+//    let selected_data = conn.query_map(
+//        "SELECT id, name, age, address, salary FROM Data",
+//        |(id, name, age, address, salary)| Data {
+//            id,
+//            name,
+//            age,
+//            address,
+//            salary,
+//        },
+//    )?;
+//    println!("{:?}", selected_data);
     Ok(())
     //todo
 }
@@ -113,7 +117,7 @@ fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Error>
 
     let connection = database_connection();
     execute_insert(&data, connection);
-    println!("{:?}", data);
+ //   println!("{:?}", data);
     Ok(())
 }
 //add CLI to read csv file
