@@ -69,12 +69,12 @@ fn execute_insert(
 ) -> std::result::Result<(), Box<dyn std::error::Error>> {
     //read from csv the column names
   
-   let table_name = String::from("Data"); 
-    let mut query = String::from("SELECT * FROM");
-    query.push_str(&table_name);
+  // let table_name = String::from("Data"); 
+  //  let mut query = String::from("SELECT * FROM");
+  //  query.push_str(&table_name);
 
-    let mut stmt = conn.query_drop(query)?;
-    println!("{:?}", stmt);
+  //  let mut stmt = conn.query_drop(query)?;
+  //  println!("{:?}", stmt);
     conn.exec_batch(
         r"INSERT INTO Data(id, name, age, address, salary)
         VALUES (:id, :name, :age, :address, :salary)",
