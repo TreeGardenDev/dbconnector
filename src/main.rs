@@ -3,6 +3,7 @@ use mysql::prelude::*;
 use mysql::*;
 use csv::Reader;
 use clap::Parser;
+pub mod tablecreate;
 fn main(){
     let pattern=std::env::args().nth(1).expect("No file given");
     //let args=CLI{
