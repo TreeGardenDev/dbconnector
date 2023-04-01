@@ -72,7 +72,7 @@ fn execute_insert(
    let table_name = String::from("Data"); 
     let mut query = String::from("SELECT * FROM");
     query.push_str(&table_name);
-    query.push_str(";");
+
     let mut stmt = conn.query_drop(query)?;
     println!("{:?}", stmt);
     conn.exec_batch(
