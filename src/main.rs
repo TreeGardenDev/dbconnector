@@ -19,7 +19,7 @@ fn main() {
         }
         "insert" => {
            // pushdata::push_data();
-            read_csv(&args.pattern);
+            read_csv(&args.path.display().to_string());
         }
         _ => {
             println!("No command given");
