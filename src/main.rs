@@ -53,8 +53,9 @@ struct Table {
 #[derive(Parser)]
 struct CLI {
     pattern: String,
-    table: String,
     path:std::path::PathBuf,
+
+    //table: String,
 }
 fn database_connection() -> PooledConn {
     let url = "mysql://kylelocal:kcb@127.0.0.1:3306/testcsv";
