@@ -8,8 +8,6 @@ pub mod tablecreate;
 fn main() {
     let pattern = std::env::args().nth(1).expect("No file given");
     let path= std::env::args().nth(2).expect("No file given");
-  //  let table= std::env::args().nth(3).expect("No file given");
-
 
     let args = CLI::parse();
     match args.pattern.as_str() {
@@ -28,15 +26,10 @@ fn main() {
     }
     
 
-    // let data= read_csv();
-    // println!("{:?}", data);
-    //    database_connection();
 }
 
-//data that will be processed
 #[derive(Debug, PartialEq, Eq)]
 struct Data {
-    //  Header:csv::StringRecord,
     id: i32,
     name: String,
     age: i32,
@@ -55,7 +48,6 @@ struct CLI {
     pattern: String,
     path:std::path::PathBuf,
 
-    //table: String,
 }
 fn database_connection() -> PooledConn {
     let url = "mysql://kylelocal:kcb@127.0.0.1:3306/testcsv";
