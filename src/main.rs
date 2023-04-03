@@ -4,6 +4,7 @@ use csv::Reader;
 use mysql::prelude::*;
 use mysql::*;
 pub mod pushdata;
+pub mod getfields;
 pub mod tablecreate;
 fn main() {
     let pattern = std::env::args().nth(1).expect("No file given");
@@ -13,8 +14,9 @@ fn main() {
     match args.pattern.as_str() {
         "create" => {
             let mut connection = database_connection();
-            let columnname = vec!["id".to_string(), "name".to_string(), "age".to_string(), "address".to_string(), "salary".to_string()];
-            tablecreate::create_table(&mut connection, &args.path.to_str().unwrap(), &columnname);
+            //let columnname = vec!["id".to_string(), "name".to_string(), "age".to_string(), "address".to_string(), "salary".to_string()];
+            let columns=getfields::read_fields(&args.path.display().to_string());
+            tablecreate::create_table(&mut connection, &args.path.to_str().unwrap(), &columns);
         }
         "insert" => {
            // pushdata::push_data();
@@ -37,6 +39,10 @@ struct Data {
     salary: i32,
 }
 
+#[derive(Debug, PartialEq, Eq)]
+struct ColData{
+    fields: Vec<String>,
+}
 #[derive(Debug, PartialEq, Eq)]
 struct Table {
     tablename: String,
