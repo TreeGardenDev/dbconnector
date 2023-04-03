@@ -14,15 +14,15 @@ fn main() {
     let args = CLI::parse();
     match args.pattern.as_str() {
         "create" => {
+
             let mut connection = database_connection();
-            //let columnname = vec!["id".to_string(), "name".to_string(), "age".to_string(), "address".to_string(), "salary".to_string()];
             let tablename = args.table;
             let columns=getfields::read_fields(&args.path.display().to_string());
             tablecreate::create_table(&mut connection, &tablename, &columns);
         }
         "insert" => {
-           // pushdata::push_data();
-           
+
+            let columns=getfields::read_fields(&args.path.display().to_string());
             pushdata::read_csv(&args.path.display().to_string());
         }
         _ => {

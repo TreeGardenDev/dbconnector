@@ -4,18 +4,34 @@ use mysql::*;
 use crate::Reader;
 fn execute_insert(
     data: &Vec<Data>,
+    tablename: &String,
     mut conn: PooledConn,
 ) -> std::result::Result<(), Box<dyn std::error::Error>> {
     //read from csv the column names
    //execute sql statement below
+   let mut querystring:String=String::from("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='");
+   querystring.push_str(tablename);
+   querystring.push_str("'");
     //let columnname = conn.query_map("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='Data'", |(COLUMN_NAME)| COLUMN_NAME)?;
-    let columnname: Vec<String> = conn.query_map("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='Data'", |(COLUMN_NAME)| COLUMN_NAME)?;
-    for i in columnname{
-        println!("{:?}", i.to_string());
-    }
+    let columnname: Vec<String> = conn.query_map(querystring, |(COLUMN_NAME)| COLUMN_NAME)?;
    //SELECT `COLUMN_NAME`  FROM `INFORMATION_SCHEMA`.`COLUMNS`  WHERE `TABLE_SCHEMA`='testcsv' AND `TABLE_NAME`='Data'; 
    
-    
+   let mut insertstatement=String::from("INSERT INTO "); 
+   insertstatement.push_str(tablename);
+   insertstatement.push_str(" (");
+    for i in &columnname{
+         insertstatement.push_str(&i);
+         insertstatement.push_str(",");
+    }
+    insertstatement.pop();
+    insertstatement.push_str(") VALUES (");
+    for i in &columnname{
+        insertstatement.push_str(":");
+        insertstatement.push_str(&i);
+        insertstatement.push_str(",");
+    }
+    println!("{:?}", insertstatement);
+
     conn.exec_batch(
         r"INSERT INTO Data(id, name, age, address, salary)
         VALUES (:id, :name, :age, :address, :salary)",
@@ -29,17 +45,7 @@ fn execute_insert(
             }
         }),
     )?;
-//    let selected_data = conn.query_map(
-//        "SELECT id, name, age, address, salary FROM Data",
-//        |(id, name, age, address, salary)| Data {
-//            id,
-//            name,
-//            age,
-//            address,
-//            salary,
-//        },
-//    )?;
-//    println!("{:?}", selected_data);
+
     Ok(())
     //todo
 }
@@ -62,8 +68,8 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
             salary,
         });
     }
-
+    let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
-    execute_insert(&data, connection);
+    execute_insert(&data, &tablename,connection);
     Ok(())
 }
