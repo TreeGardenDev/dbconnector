@@ -29,7 +29,6 @@ fn main() {
             println!("No command given");
         }
     }
-    
 
 }
 

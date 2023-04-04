@@ -12,7 +12,7 @@ pub fn read_fields(file: &String) -> Vec<String>{
         let record = result;
         data.push(record.expect("Reason").get(0).expect("Reason").to_string());
     }
-    println!("{:?}", data);
+//    println!("{:?}", data);
     return data
 
 }
