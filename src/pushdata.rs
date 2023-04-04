@@ -1,14 +1,16 @@
+use csv::StringRecord;
 use crate::Data;
 use mysql::prelude::*;
 use mysql::*;
 use crate::Reader;
 
-struct InsertData{
-    data: Vec<String>,
+#[derive(Debug)]
+struct InsertData<'a>{
+    data: Vec<&'a str>,
 }
 
 fn execute_insert(
-    data: &Vec<Data>,
+    data: &Vec<String>,
     tablename: &String,
     mut conn: PooledConn,
 ) -> std::result::Result<(), Box<dyn std::error::Error>> {
@@ -42,19 +44,19 @@ fn execute_insert(
 
     //dynamically insert into table tablename based on number of columns in columname variable
 
-    conn.exec_batch(
-        r"INSERT INTO Data(id, name, age, address, salary)
-        VALUES (:id, :name, :age, :address, :salary)",
-        data.iter().map(|p| {
-            params! {
-                "id" => p.id,
-                "name" => &p.name,
-                "age" => p.age,
-                "address" => &p.address,
-                "salary" => p.salary,
-            }
-        }),
-    )?;
+    //conn.exec_batch(
+    //    r"INSERT INTO Data(id, name, age, address, salary)
+    //    VALUES (:id, :name, :age, :address, :salary)",
+    //    data.iter().map(|p| {
+    //        params! {
+    //            "id" => p.id,
+    //            "name" => &p.name,
+    //            "age" => p.age,
+    //            "address" => &p.address,
+    //            "salary" => p.salary,
+    //        }
+    //    }),
+    //)?;
 
     Ok(())
     //todo
@@ -71,6 +73,15 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
         let record = result?;
 
         let columnname = rdr.headers()?;
+        
+        let mut vecty:Vec<&str>=Vec::new();
+        for i in columnname{
+            vecty.push(i);
+        }
+        let columnames=InsertData{
+            data:vecty
+        };
+        println!("{:?}", columnames);
         let columncount=columnname.len();
         for column in 0..columncount {
         println!("Column Name: {}", &columnname[column]);
@@ -79,7 +90,7 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
         data.push(record[column].to_string());
 
        // data.push(Data {
-       //     id,
+        //    id,
        //     name,
        //     age,
        //     address,
@@ -90,6 +101,7 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     println!("{:?}", data);
     let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
-   // execute_insert(&data, &tablename,connection);
+    //execute_insert(&data, &tablename,connection);
     Ok(())
 }
+
