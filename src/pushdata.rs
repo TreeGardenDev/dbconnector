@@ -70,6 +70,7 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     let columncount=columnname.len();
     for column in 0..columncount {
     
+        println!("Column Name: {}", &columnname[column]);
         for result in rdr2.records() {
         let record = result?;
         let id = record[column].parse::<String>()?;
