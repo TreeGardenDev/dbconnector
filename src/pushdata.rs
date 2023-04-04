@@ -65,7 +65,10 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     let mut data: Vec<Data> = Vec::new();
     let mut data2 : Vec<InsertData>=Vec::new();
     //iterate through every column in csv file
-    
+    let columnname = rdr.headers()?;
+    for column in columnname {
+        println!("{}", column);
+    } 
     for result in rdr.records() {
         let record = result?;
         let id = record[0].parse::<i32>()?;
@@ -83,6 +86,6 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     }
     let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
-    execute_insert(&data, &tablename,connection);
+   // execute_insert(&data, &tablename,connection);
     Ok(())
 }
