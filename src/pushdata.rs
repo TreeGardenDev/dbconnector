@@ -62,7 +62,7 @@ fn execute_insert(
 pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Error>> {
     //fn read_csv() ->Vec<Data> {
     let mut rdr = Reader::from_path(file)?;
-    let mut data: Vec<Data> = Vec::new();
+    let mut data: Vec<String> = Vec::new();
     let mut data2 : Vec<InsertData>=Vec::new();
     //iterate through every column in csv file
     let mut rdr2=Reader::from_path(file)?;
@@ -74,8 +74,8 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
         println!("Column Index: {}", column); 
         for result in rdr2.records() {
         let record = result?;
-        let _id = record[column].to_string();
-        println!("{}", _id);
+        //let _id = record[column].to_string();
+        data.push(record[column].to_string());
 
        // data.push(Data {
        //     id,
@@ -86,6 +86,7 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
        // });
     }
     }
+    println!("{:?}", data);
     let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
    // execute_insert(&data, &tablename,connection);
