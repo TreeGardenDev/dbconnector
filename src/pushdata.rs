@@ -67,11 +67,12 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     //iterate through every column in csv file
     let mut rdr2=Reader::from_path(file)?;
     let columnname = rdr.headers()?;
-    for column in columnname {
+    let columncount=columnname.len();
+    for column in 0..columncount {
     
         for result in rdr2.records() {
         let record = result?;
-        let id = record[0].parse::<String>()?;
+        let id = record[column].parse::<String>()?;
         println!("{}", id);
 
        // data.push(Data {
