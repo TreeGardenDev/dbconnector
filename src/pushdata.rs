@@ -66,9 +66,12 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     let mut data2 : Vec<InsertData>=Vec::new();
     //iterate through every column in csv file
     let columnname = rdr.headers()?;
+    let mut columnarray: Vec<&str> = Vec::new();
     for column in columnname {
-        println!("{}", column);
+    
+        columnarray.push(column);
     } 
+    println!("{:?}", columnname);
     for result in rdr.records() {
         let record = result?;
         let id = record[0].parse::<i32>()?;
