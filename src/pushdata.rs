@@ -13,6 +13,7 @@ fn execute_insert(
     data: &Vec<String>,
     tablename: &String,
     mut conn: PooledConn,
+    columnames: &InsertData,
 ) -> std::result::Result<(), Box<dyn std::error::Error>> {
     //read from csv the column names
    //execute sql statement below
@@ -44,19 +45,23 @@ fn execute_insert(
 
     //dynamically insert into table tablename based on number of columns in columname variable
 
-    //conn.exec_batch(
-    //    r"INSERT INTO Data(id, name, age, address, salary)
-    //    VALUES (:id, :name, :age, :address, :salary)",
-    //    data.iter().map(|p| {
-    //        params! {
-    //            "id" => p.id,
-    //            "name" => &p.name,
-    //            "age" => p.age,
-    //            "address" => &p.address,
-    //            "salary" => p.salary,
-    //        }
-    //    }),
-    //)?;
+    
+    
+
+    conn.exec_batch(
+       insertstatement, 
+        
+        InsertData.data.iter().map(|p| {
+            params! {
+                for i in &columnname{
+                    let mut executestate=String::from('"');
+                    executestate.push_str(&i);
+                    executestate.push_str('"');
+                executestate : p.i,
+                }   
+            }
+        }),
+    )?;
 
     Ok(())
     //todo
@@ -101,7 +106,7 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     println!("{:?}", data);
     let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
-    //execute_insert(&data, &tablename,connection);
+    //execute_insert(&data, &tablename,connection, vecty);
     Ok(())
 }
 
