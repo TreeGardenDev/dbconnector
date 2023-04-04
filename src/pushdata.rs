@@ -65,27 +65,23 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     let mut data: Vec<Data> = Vec::new();
     let mut data2 : Vec<InsertData>=Vec::new();
     //iterate through every column in csv file
+    let mut rdr2=Reader::from_path(file)?;
     let columnname = rdr.headers()?;
-    let mut columnarray: Vec<&str> = Vec::new();
     for column in columnname {
     
-        columnarray.push(column);
-    } 
-    println!("{:?}", columnname);
-    for result in rdr.records() {
+        for result in rdr2.records() {
         let record = result?;
-        let id = record[0].parse::<i32>()?;
-        let name = record[1].to_string();
-        let age = record[2].parse::<i32>()?;
-        let address = record[3].to_string();
-        let salary = record[4].parse::<i32>()?;
-        data.push(Data {
-            id,
-            name,
-            age,
-            address,
-            salary,
-        });
+        let id = column.parse::<String>()?;
+        println!("{}", id);
+
+       // data.push(Data {
+       //     id,
+       //     name,
+       //     age,
+       //     address,
+       //     salary,
+       // });
+    }
     }
     let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
