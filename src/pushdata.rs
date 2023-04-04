@@ -66,16 +66,17 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     let mut data2 : Vec<InsertData>=Vec::new();
     //iterate through every column in csv file
     let mut rdr2=Reader::from_path(file)?;
-    let columnname = rdr.headers()?;
-    let columncount=columnname.len();
-    for column in 0..columncount {
     
-        println!("Column Name: {}", &columnname[column]);
-        println!("Column Index: {}", column); 
         for result in rdr2.records() {
         let record = result?;
+
+        let columnname = rdr.headers()?;
+        let columncount=columnname.len();
+        for column in 0..columncount {
+        println!("Column Name: {}", &columnname[column]);
+        println!("Column Index: {}", column); 
         //let _id = record[column].to_string();
-        data.push(record[columncount-1].to_string());
+        data.push(record[column].to_string());
 
        // data.push(Data {
        //     id,
