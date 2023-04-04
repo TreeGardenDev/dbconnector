@@ -13,7 +13,7 @@ fn execute_insert(
     data: &Vec<String>,
     tablename: &String,
     mut conn: PooledConn,
-    columnames: &InsertData,
+    columnames: Vec<&str>,
 ) -> std::result::Result<(), Box<dyn std::error::Error>> {
     //read from csv the column names
    //execute sql statement below
@@ -47,21 +47,25 @@ fn execute_insert(
 
     
     
+    //insert into mysql data from data variable into columns in columnname variable
+    for i in columnname.iter(){
+        println!("{:?}", i);
+    }
 
-    conn.exec_batch(
-       insertstatement, 
-        
-        InsertData.data.iter().map(|p| {
-            params! {
-                for i in &columnname{
-                    let mut executestate=String::from('"');
-                    executestate.push_str(&i);
-                    executestate.push_str('"');
-                executestate : p.i,
-                }   
-            }
-        }),
-    )?;
+   // conn.exec_batch(
+   //    insertstatement, 
+   //     
+   //     columnames.data.iter()(|p| {
+   //         params! {
+   //             for i in &columnname{
+   //                 let mut executestate=String::from('"');
+   //                 executestate.push_str(i);
+   //                 executestate.push_str('"');
+   //             executestate =>  p.i,
+   //             }   
+   //         }
+   //     }),
+   // )?;
 
     Ok(())
     //todo
@@ -71,6 +75,7 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     let mut rdr = Reader::from_path(file)?;
     let mut data: Vec<String> = Vec::new();
     let mut data2 : Vec<InsertData>=Vec::new();
+    let mut vecty:Vec<&str>=Vec::new();
     //iterate through every column in csv file
     let mut rdr2=Reader::from_path(file)?;
     
@@ -79,19 +84,15 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
 
         let columnname = rdr.headers()?;
         
-        let mut vecty:Vec<&str>=Vec::new();
-        for i in columnname{
-            vecty.push(i);
-        }
-        let columnames=InsertData{
-            data:vecty
-        };
-        println!("{:?}", columnames);
+       // let columnames=InsertData{
+       //     data:vecty
+       // };
         let columncount=columnname.len();
         for column in 0..columncount {
-        println!("Column Name: {}", &columnname[column]);
+        //println!("Column Name: {}", &columnname2[column]);
         println!("Column Index: {}", column); 
         //let _id = record[column].to_string();
+
         data.push(record[column].to_string());
 
        // data.push(Data {
@@ -101,12 +102,20 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
        //     address,
        //     salary,
        // });
+
     }
+
     }
+    let mut rdr3=Reader::from_path(file)?;
+        let columnname2 = rdr3.headers()?;
+        for u in columnname2{
+
+            vecty.push(&u);
+        }
     println!("{:?}", data);
     let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
-    //execute_insert(&data, &tablename,connection, vecty);
+    execute_insert(&data, &tablename,connection, vecty);
     Ok(())
 }
 
