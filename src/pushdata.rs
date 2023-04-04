@@ -71,7 +71,7 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     
         for result in rdr2.records() {
         let record = result?;
-        let id = column.parse::<String>()?;
+        let id = record.parse::<String>()?;
         println!("{}", id);
 
        // data.push(Data {
