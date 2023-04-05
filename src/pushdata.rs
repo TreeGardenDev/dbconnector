@@ -3,14 +3,13 @@ use crate::Data;
 use mysql::prelude::*;
 use mysql::*;
 use crate::Reader;
-
-#[derive(Debug)]
-struct InsertData<'a>{
+#[derive(Debug)] struct InsertData<'a>{
     data: Vec<&'a str>,
 }
 
 fn execute_insert(
-    data: &Vec<String>,
+    data: Vec<Data>,
+    //data: &Vec<String>,
     tablename: &String,
     mut conn: PooledConn,
     columnames: Vec<&str>,
@@ -46,36 +45,36 @@ fn execute_insert(
     //dynamically insert into table tablename based on number of columns in columname variable
 
     
-   // conn.exec_batch(
-   //     r"INSERT INTO Data(id, name, age, address, salary)
-   //     VALUES (:id, :name, :age, :address, :salary)",
-   //     data.iter().map(|p| {
-   //         params! {
-   //             "id" => p.id,
-   //             "name" => &p.name,
-   //             "age" => p.age,
-   //             "address" => &p.address,
-   //             "salary" => p.salary,
-   //         }
-   //     }),
-   // )?;
-    //insert into mysql data from data variable into columns in columnname variable
-
-    conn.exec_batch(
-       insertstatement, 
-        
-      //  data.iter().map(|p| {
-      data.chunks(columnname.len()).map(|p|{
-            //let
-//                //let mut
+     conn.exec_batch(
+        r"INSERT INTO Data(id, name, age, address, salary)
+       VALUES (:id, :name, :age, :address, :salary)",
+       data.iter().map(|p| {
             params! {
-    for i in columnname.iter(){
-//   //             for i in &columnname{
-                i=>  p,
-                }   
+                "id" => p.id,
+                "name" => &p.name,
+                "age" => p.age,
+                "address" => &p.address,
+                "salary" => p.salary,
             }
         }),
-   )?;
+    )?;
+    //insert into mysql data from data variable into columns in columnname variable
+
+   // conn.exec_batch(
+    //   insertstatement, 
+        
+      //  data.iter().map(|p| {
+    //  data.chunks(columnname.len()).map(|p|{
+            //let
+//                //let mut
+     //       params! {
+    //for i in columnname.iter(){
+//   //             for i in &columnname{
+     //           i=>  p.iter().next().unwrap(),
+//                }   
+//            }
+//        }),
+//   )?;
 
     Ok(())
     //todo
@@ -83,8 +82,9 @@ fn execute_insert(
 pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Error>> {
     //fn read_csv() ->Vec<Data> {
     let mut rdr = Reader::from_path(file)?;
-    let mut data: Vec<String> = Vec::new();
-    let mut data2 : Vec<InsertData>=Vec::new();
+    //let mut data: Vec<String> = Vec::new();
+    let mut data: Vec<Data> = Vec::new();
+    //let mut data2 : Vec<InsertData>=Vec::new();
     let mut vecty:Vec<&str>=Vec::new();
     //iterate through every column in csv file
     let mut rdr2=Reader::from_path(file)?;
@@ -103,15 +103,21 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
         println!("Column Index: {}", column); 
         //let _id = record[column].to_string();
 
-        data.push(record[column].to_string());
+        //data.push(record[column].to_string());
+        let id = record[0].parse::<i32>().unwrap();
+        let name = record[1].to_string();
+        let age = record[2].parse::<i32>().unwrap();
+        let address = record[3].to_string();
+        let salary = record[4].parse::<i32>().unwrap();
+        
 
-       // data.push(Data {
-        //    id,
-       //     name,
-       //     age,
-       //     address,
-       //     salary,
-       // });
+       data.push(Data {
+            id,
+            name,
+            age,
+            address,
+            salary,
+        });
 
     }
 
@@ -125,7 +131,6 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
     println!("{:?}", data);
     let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
-    execute_insert(&data, &tablename,connection, vecty);
+    execute_insert(data, &tablename,connection, vecty);
     Ok(())
 }
-
