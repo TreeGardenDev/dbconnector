@@ -98,9 +98,9 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
        //     data:vecty
        // };
         let columncount=columnname.len();
-        for column in 0..columncount {
+  //      for column in 0..columncount {
         //println!("Column Name: {}", &columnname2[column]);
-        println!("Column Index: {}", column); 
+        //println!("Column Index: {}", column); 
         //let _id = record[column].to_string();
 
         //data.push(record[column].to_string());
@@ -119,7 +119,7 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
             salary,
         });
 
-    }
+    //}
 
     }
     let mut rdr3=Reader::from_path(file)?;
