@@ -48,24 +48,20 @@ fn execute_insert(
     
     
     //insert into mysql data from data variable into columns in columnname variable
-    for i in columnname.iter(){
-        println!("{:?}", i);
-    }
 
-   // conn.exec_batch(
-   //    insertstatement, 
-   //     
-   //     columnames.data.iter()(|p| {
-   //         params! {
-   //             for i in &columnname{
-   //                 let mut executestate=String::from('"');
-   //                 executestate.push_str(i);
-   //                 executestate.push_str('"');
-   //             executestate =>  p.i,
-   //             }   
-   //         }
-   //     }),
-   // )?;
+    conn.exec_batch(
+       insertstatement, 
+        
+        data.iter().map(|p| {
+//                //let mut
+            params! {
+    for i in columnname.iter(){
+//   //             for i in &columnname{
+                i=>  p,
+                }   
+            }
+        }),
+   )?;
 
     Ok(())
     //todo
