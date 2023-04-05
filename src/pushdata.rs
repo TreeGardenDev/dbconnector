@@ -46,13 +46,27 @@ fn execute_insert(
     //dynamically insert into table tablename based on number of columns in columname variable
 
     
-    
+   // conn.exec_batch(
+   //     r"INSERT INTO Data(id, name, age, address, salary)
+   //     VALUES (:id, :name, :age, :address, :salary)",
+   //     data.iter().map(|p| {
+   //         params! {
+   //             "id" => p.id,
+   //             "name" => &p.name,
+   //             "age" => p.age,
+   //             "address" => &p.address,
+   //             "salary" => p.salary,
+   //         }
+   //     }),
+   // )?;
     //insert into mysql data from data variable into columns in columnname variable
 
     conn.exec_batch(
        insertstatement, 
         
-        data.iter().map(|p| {
+      //  data.iter().map(|p| {
+      data.chunks(columnname.len()).map(|p|{
+            //let
 //                //let mut
             params! {
     for i in columnname.iter(){
