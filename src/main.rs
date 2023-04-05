@@ -4,27 +4,31 @@ use csv::Reader;
 use mysql::prelude::*;
 use mysql::*;
 pub mod pushdata;
+pub mod getfields;
 pub mod tablecreate;
 fn main() {
-    let pattern = std::env::args().nth(1).expect("No file given");
-    let path= std::env::args().nth(2).expect("No file given");
+    let pattern = std::env::args().nth(1).expect("No Command Given");
+    let table = std::env::args().nth(2).expect("No Table");
+    let path= std::env::args().nth(3).expect("No file given");
 
     let args = CLI::parse();
     match args.pattern.as_str() {
         "create" => {
+
             let mut connection = database_connection();
-            let columnname = vec!["id".to_string(), "name".to_string(), "age".to_string(), "address".to_string(), "salary".to_string()];
-            tablecreate::create_table(&mut connection, &args.path.to_str().unwrap(), &columnname);
+            let tablename = args.table;
+            let columns=getfields::read_fields(&args.path.display().to_string());
+            tablecreate::create_table(&mut connection, &tablename, &columns);
         }
         "insert" => {
-           // pushdata::push_data();
+
+            let columns=getfields::read_fields(&args.path.display().to_string());
             pushdata::read_csv(&args.path.display().to_string());
         }
         _ => {
             println!("No command given");
         }
     }
-    
 
 }
 
@@ -38,6 +42,10 @@ struct Data {
 }
 
 #[derive(Debug, PartialEq, Eq)]
+struct ColData{
+    fields: Vec<String>,
+}
+#[derive(Debug, PartialEq, Eq)]
 struct Table {
     tablename: String,
     columnname: Vec<String>,
@@ -46,6 +54,7 @@ struct Table {
 #[derive(Parser)]
 struct CLI {
     pattern: String,
+    table: String,
     path:std::path::PathBuf,
 
 }
