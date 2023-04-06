@@ -21,26 +21,26 @@ pub fn get_table_col(conn: &mut PooledConn, table_name: &str)
 }
 
 
-//pub fn createinsertstatement(conn: &PooledConn, table_name: &str) -> String
-//{
-//    let mut insertstatement = String::from("insert into ");
-//    insertstatement.push_str(table_name);
-//    insertstatement.push_str(" (");
-//    let mut col_vec = get_table_col(conn, table_name).unwrap();
-//    for col in &col_vec {
-//        insertstatement.push_str(&col);
-//        insertstatement.push_str(",");
-//    }
-//    insertstatement.pop();
-//    insertstatement.push_str(") values (");
-//    for col2 in &col_vec {
-//        insertstatement.push_str(":");
-//        insertstatement.push_str(&col2);
-//        insertstatement.push_str(",");
-//    }
-//    insertstatement.pop();
-//    insertstatement.push_str(")");
-//    insertstatement
-//
-//
-//}
+pub fn createinsertstatement(conn: &mut PooledConn, table_name: &str) -> String
+{
+    let mut insertstatement = String::from("insert into ");
+    insertstatement.push_str(table_name);
+    insertstatement.push_str(" (");
+    let mut col_vec = get_table_col(conn, table_name).unwrap();
+    for col in &col_vec {
+        insertstatement.push_str(&col);
+        insertstatement.push_str(",");
+    }
+    insertstatement.pop();
+   insertstatement.push_str(") values (");
+    for col2 in &col_vec {
+        insertstatement.push_str(":");
+        insertstatement.push_str(&col2);
+        insertstatement.push_str(",");
+    }
+    insertstatement.pop();
+    insertstatement.push_str(")");
+    insertstatement
+
+
+}

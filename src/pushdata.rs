@@ -25,7 +25,8 @@ fn execute_insert(
    //SELECT `COLUMN_NAME`  FROM `INFORMATION_SCHEMA`.`COLUMNS`  WHERE `TABLE_SCHEMA`='testcsv' AND `TABLE_NAME`='Data'; 
  let columname: Vec<String> = gettablecol::get_table_col(&mut conn, &tablename).unwrap();
  println!("{:?}", columname);
-// let insertstatement =gettablecol::createinsertstatement(&mut conn, &tablename);
+ let insertstatement =gettablecol::createinsertstatement(&mut conn, &tablename);
+ println!("{}", insertstatement);
 //   let mut insertstatement=String::from("INSERT INTO "); 
 //   insertstatement.push_str(&tablename);
 //   insertstatement.push_str(" (");
