@@ -23,7 +23,7 @@ fn main() {
         "insert" => {
 
             let columns=getfields::read_fields(&args.path.display().to_string());
-            pushdata::read_csv(&args.path.display().to_string());
+            pushdata::createtablestruct::read_csv(&args.path.display().to_string());
         }
         _ => {
             println!("No command given");
@@ -45,18 +45,18 @@ struct Data {
 struct ColData{
     fields: Vec<String>,
 }
-#[derive(Debug, PartialEq, Eq)]
-struct Table {
-    tablename: String,
-    columnname: Vec<String>,
-    columntype: Vec<String>,
-}
 #[derive(Parser)]
 struct CLI {
     pattern: String,
     table: String,
     path:std::path::PathBuf,
 
+}
+type column = Vec<String>;
+
+struct Table{
+    tablename: String,
+    columnname: Vec<column>,
 }
 fn database_connection() -> PooledConn {
     let url = "mysql://kylelocal:kcb@127.0.0.1:3306/testcsv";

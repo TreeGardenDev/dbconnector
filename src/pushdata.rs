@@ -3,7 +3,9 @@ use crate::Data;
 use mysql::prelude::*;
 use mysql::*;
 use crate::Reader;
+use crate::Table;
 pub mod gettablecol;
+pub mod createtablestruct;
 #[derive(Debug)] struct InsertData<'a>{
     data: Vec<&'a str>,
 }
@@ -15,38 +17,11 @@ fn execute_insert(
     mut conn: PooledConn,
     columnames: Vec<&str>,
 ) -> std::result::Result<(), Box<dyn std::error::Error>> {
-    //read from csv the column names
-   //execute sql statement below
-//   let mut querystring:String=String::from("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='");
-//   querystring.push_str(tablename);
-//   querystring.push_str("'");
-    //let columnname = conn.query_map("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='Data'", |(COLUMN_NAME)| COLUMN_NAME)?;
-//    let columnname: Vec<String> = conn.query_map(querystring, |(COLUMN_NAME)| COLUMN_NAME)?;
-   //SELECT `COLUMN_NAME`  FROM `INFORMATION_SCHEMA`.`COLUMNS`  WHERE `TABLE_SCHEMA`='testcsv' AND `TABLE_NAME`='Data'; 
- let columname: Vec<String> = gettablecol::get_table_col(&mut conn, &tablename).unwrap();
- println!("{:?}", columname);
- let insertstatement =gettablecol::createinsertstatement(&mut conn, &tablename);
- println!("{}", insertstatement);
-//   let mut insertstatement=String::from("INSERT INTO "); 
-//   insertstatement.push_str(&tablename);
-//   insertstatement.push_str(" (");
-//   //Todo combine these two for loops for better efficiency
-//    for i in &columnname{
-//         insertstatement.push_str(&i);
-//         insertstatement.push_str(",");
-//    }
-//    insertstatement.pop();
-//    insertstatement.push_str(") VALUES (");
-//    for i in &columnname{
-//        insertstatement.push_str(":");
-//        insertstatement.push_str(&i);
-//        insertstatement.push_str(",");
-//    }
-//    insertstatement.pop();
-//    insertstatement.push_str(")");
-//    println!("{:?}", insertstatement);
-
-    //dynamically insert into table tablename based on number of columns in columname variable
+    
+    let columname: Vec<String> = gettablecol::get_table_col(&mut conn, &tablename).unwrap();
+    println!("{:?}", columname);
+    let insertstatement =gettablecol::createinsertstatement(&mut conn, &tablename);
+    println!("{}", insertstatement);
 
     
      conn.exec_batch(

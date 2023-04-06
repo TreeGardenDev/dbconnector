@@ -2,21 +2,13 @@ use mysql::prelude::*;
 use mysql::*;
 pub fn get_table_col(conn: &mut PooledConn, table_name: &str)
  -> std::result::Result<Vec<String>, Box<dyn std::error::Error>> {
-    //let mut stmt = conn.prepare(sql).unwrap();
- //Result<Vec<String>, mysql::Error> {
-    //let mut stmt = conn.prepare(sql).unwrap();
-//    let result: Vec<String> = conn.query_map((), |(column_name,)| column_name).unwrap();
-    //let columnname: Vec<String> = conn.query_map(querystring, |(COLUMN_NAME)| COLUMN_NAME);
-     let mut querystring:String=String::from("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='");
+   let mut querystring:String=String::from("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='");
    querystring.push_str(table_name.to_string().as_str());
    querystring.push_str("'");
     //let columnname = conn.query_map("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='testcsv' AND TABLE_NAME='Data'", |(COLUMN_NAME)| COLUMN_NAME)?;
-    let columnname = conn.query_map(querystring, |(COLUMN_NAME)| COLUMN_NAME)?;
-    //let mut col_vec:Vec<String> = Vec::new();
-    //for col in columnname{
-    //    col_vec.push(col);
-    //}
-   Ok((columnname))
+    let columnname = conn.query_map(querystring, |(column_name)| column_name)?;
+
+    Ok((columnname))
 
 }
 
