@@ -99,30 +99,12 @@ pub fn read_csv2(file: &String) -> std::result::Result<(), Box<dyn std::error::E
        //     data:vecty
        // };
         let columncount=columnname.len();
-        //println!("Column Name: {}", &columnname2[column]);
-        //println!("Column Index: {}", column); let _id = record[column].to_string();
-
-        //data.push(record[column].to_string());
-        let id = record[0].parse::<i32>().unwrap();
-        let name = record[1].to_string();
-        let age = record[2].parse::<i32>().unwrap();
-        let address = record[3].to_string();
-        let salary = record[4].parse::<i32>().unwrap();
  
         let mut columnvector=Vec::new();
         for column in 0..record.len(){
             columnvector.push(record[column].to_string());
         }
         combinedcol.push(columnvector);
-//       data.push(Data {
-//            id,
-//            name,
-//            age,
-//            address,
-//            salary,
-//        });
-
-    //}
 
     }
         data.push(Data2 {
