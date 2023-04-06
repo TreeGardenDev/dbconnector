@@ -81,6 +81,7 @@ pub fn read_csv(file: &String) -> std::result::Result<(), Box<dyn std::error::Er
 pub fn read_csv2(file: &String) -> std::result::Result<(), Box<dyn std::error::Error>> {
     //fn read_csv() ->Vec<Data> {
     let mut rdr = Reader::from_path(file)?;
+    let mut combinedcol=Vec::new();
     //let mut data: Vec<String> = Vec::new();
     //let mut data: Vec<Data> = Vec::new();
     let mut data: Vec<Data2> = Vec::new();
@@ -108,16 +109,11 @@ pub fn read_csv2(file: &String) -> std::result::Result<(), Box<dyn std::error::E
         let address = record[3].to_string();
         let salary = record[4].parse::<i32>().unwrap();
  
+        let mut columnvector=Vec::new();
         for column in 0..record.len(){
-            let mut columnvector=Vec::new();
             columnvector.push(record[column].to_string());
-            data.push(Data2 {
-                columns: columnvector,
-            });
         }
-        println!("New Struct below");
-        println!("{:?}", data);
-        println!("New Struct above");
+        combinedcol.push(columnvector);
 //       data.push(Data {
 //            id,
 //            name,
@@ -129,6 +125,12 @@ pub fn read_csv2(file: &String) -> std::result::Result<(), Box<dyn std::error::E
     //}
 
     }
+        data.push(Data2 {
+             columns: combinedcol,
+         });
+        println!("New Struct below");
+        println!("{:?}", data);
+        println!("New Struct above");
     let mut rdr3=Reader::from_path(file)?;
         let columnname2 = rdr3.headers()?;
         for u in columnname2{

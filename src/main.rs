@@ -34,7 +34,7 @@ fn main() {
 
 #[derive(Debug, PartialEq, Eq)]
 struct Data2 {
-    columns: column
+    columns: Vec<column>
 }
 #[derive(Debug, PartialEq, Eq)]
 struct Data {
