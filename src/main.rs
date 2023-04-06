@@ -23,7 +23,7 @@ fn main() {
         "insert" => {
 
             let columns=getfields::read_fields(&args.path.display().to_string());
-            pushdata::createtablestruct::read_csv(&args.path.display().to_string());
+            pushdata::createtablestruct::read_csv2(&args.path.display().to_string());
         }
         _ => {
             println!("No command given");
@@ -32,6 +32,10 @@ fn main() {
 
 }
 
+#[derive(Debug, PartialEq, Eq)]
+struct Data2 {
+    columns: column
+}
 #[derive(Debug, PartialEq, Eq)]
 struct Data {
     id: i32,
