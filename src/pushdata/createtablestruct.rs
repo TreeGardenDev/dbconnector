@@ -133,5 +133,6 @@ pub fn read_csv2(file: &String) -> std::result::Result<(), Box<dyn std::error::E
    // println!("{:?}", data);
     let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
+    pushdata::execute_insert2(data, tablename,connection, vecty);
     Ok(())
 }
