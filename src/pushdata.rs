@@ -87,6 +87,7 @@ fn execute_insert2(
  //       }),
  //   )?;
     //insert into mysql data from data variable into columns in columnname variable
+    println!("In exc function");
     for i in 0..data.len(){
         for j in 0..data[i].columns.len(){
             println!("New Column");
