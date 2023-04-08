@@ -126,6 +126,7 @@ pub fn read_csv2(file: &String) -> std::result::Result<(), Box<dyn std::error::E
                 println!("{:?}", data[i].columns[j][k]);
                 //println!("Data above");
             }
+            println!("New Column");
         }
     }
     
