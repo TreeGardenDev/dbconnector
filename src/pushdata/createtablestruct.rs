@@ -119,6 +119,11 @@ pub fn read_csv2(file: &String) -> std::result::Result<(), Box<dyn std::error::E
 
             vecty.push(&u);
         }
+    for i in 0..data.len(){
+        println!("Data below");
+        println!("{:?}", data[i].columns);
+        println!("Data above");
+    }
     println!("{:?}", data);
     let tablename= std::env::args().nth(2).expect("No Table");
     let connection = crate::database_connection();
