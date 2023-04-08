@@ -72,6 +72,8 @@ fn execute_insert2(
     let insertstatement =gettablecol::createinsertstatement(&mut conn, &tablename, data);
     println!("{}", insertstatement);
 
+    //run inser statement
+    conn.query_drop(insertstatement)?;
     
  //    conn.exec_batch(
  //       r"INSERT INTO Data(id, name, age, address, salary)
