@@ -73,7 +73,7 @@ fn execute_insert2(
     println!("{}", insertstatement);
 
     //run inser statement
-    conn.query_drop(insertstatement)?;
+    conn.query_first(insertstatement)?;
     
  //    conn.exec_batch(
  //       r"INSERT INTO Data(id, name, age, address, salary)
