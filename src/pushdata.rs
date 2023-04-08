@@ -89,6 +89,7 @@ fn execute_insert2(
    // }
     //run inser statement
     
+    conn.query_drop(insertstatement)?;
  //    conn.exec_batch(
  //       r"INSERT INTO Data(id, name, age, address, salary)
  //      VALUES (:id, :name, :age, :address, :salary)",
