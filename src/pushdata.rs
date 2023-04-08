@@ -72,8 +72,22 @@ fn execute_insert2(
     let insertstatement =gettablecol::createinsertstatement(&mut conn, &tablename, data);
     println!("{}", insertstatement);
 
+   // let mut params = Vec::new();
+   // for i in 0..data.len(){
+   //     for j in 0..data[i].columns.len(){
+   //         for k in 0..data[i].columns[j].len(){
+   //             let datarecord=data[i].columns[j][k];
+   //             params.push(params!{
+   //                 "id" => datarecord.id,
+   //                 "name" => &datarecord.name,
+   //                 "age" => datarecord.age,
+   //                 "address" => &datarecord.address,
+   //                 "salary" => datarecord.salary,
+   //             });
+   //         }
+   //     }
+   // }
     //run inser statement
-    conn.query_first(insertstatement)?;
     
  //    conn.exec_batch(
  //       r"INSERT INTO Data(id, name, age, address, salary)

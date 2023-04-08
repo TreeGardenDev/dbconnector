@@ -50,6 +50,7 @@ pub fn createinsertstatement(conn: &mut PooledConn, table_name: &str, data:Vec<D
 
     }
     insertstatement.pop();
+    insertstatement.push_str(";");
     insertstatement
 
 
