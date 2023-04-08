@@ -46,10 +46,10 @@ pub fn createinsertstatement(conn: &mut PooledConn, table_name: &str, data:Vec<D
             insertstatement.push_str("),(");
 
     }
+        insertstatement.pop();
 
     }
     insertstatement.pop();
-    insertstatement.push_str(")");
     insertstatement
 
 
