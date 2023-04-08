@@ -33,7 +33,7 @@ fn main() {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-struct Data2 {
+pub struct Data2 {
     columns: Vec<column>
 }
 #[derive(Debug, PartialEq, Eq)]
